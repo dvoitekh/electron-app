@@ -9,6 +9,14 @@
   "author": "dvoitekh",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^1.4.15"
+    "babel-preset-es2016-node5": "^1.1.2",
+    "babel-preset-react": "^6.23.0",
+    "electron": "^1.4.15",
+    "electron-packager": "^8.5.1",
+    "electron-prebuilt-compile": "^1.4.15"
+  },
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
   }
 }
