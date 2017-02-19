@@ -1,13 +1,39 @@
 import React from 'react';
 
 export default class Main extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      items: ['hello', 'bye', 'love you'],
+      newItem: ''
+    };
+  }
+
+  handleClick() {
+    this.setState({
+      items: [this.state.newItem, ...this.state.items],
+      newItem: ''
+    });
+  }
+
+  handleChange(e) {
+    this.setState({
+      newItem: e.target.value
+    });
+  }
+
   render() {
     let divStyle = {textAlign: 'center', padding: '10px 20px'};
-    let imgStyle = {width: '400px'};
     return (
       <div style={divStyle}>
-        <img style={imgStyle} src={'https://s-media-cache-ak0.pinimg.com/originals/7c/ea/d8/7cead8235b46453b0777ef08d8fbd96b.jpg'} />
-        <h1>Hello Electron</h1>
+        <input className="" type="text" placeholder="Enter new To Do" value={this.state.newItem} onChange={this.handleChange.bind(this)} />
+        <input type="button" value="Submit" onClick={this.handleClick.bind(this)} />
+        <ul>
+          {this.state.items.map((item, i) => {
+            return <li key={i}>{item}</li>;
+          })}
+        </ul>
       </div>
     );
   }

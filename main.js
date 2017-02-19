@@ -18,10 +18,10 @@ function createWindow () {
   }));
 
   // Open the DevTools.
-  // win.webContents.openDevTools();
-  win.webContents.on('devtools-opened', () => {
-    win.webContents.closeDevTools();
-  });
+  win.webContents.openDevTools();
+  // win.webContents.on('devtools-opened', () => {
+  //   win.webContents.closeDevTools();
+  // });
 
   // Emitted when the window is closed.
   win.on('closed', () => {
