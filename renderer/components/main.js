@@ -9,12 +9,12 @@ export default class Main extends React.Component {
 
     this.state = {
       items: [],
-      newItem: ''
+      newItem: { text: '', id: undefined }
     };
 
     client.lrange('items', 0, -1, (err, items) => {
       this.setState({
-        items: items,
+        items: items.map(item => JSON.parse(item))
       });
     });
   }
@@ -22,15 +22,16 @@ export default class Main extends React.Component {
   persistData(newItems) {
     this.setState({
       items: newItems,
-      newItem: ''
+      newItem: { text: '', id: undefined }
     });
 
     client.del('items');
-    client.rpush.apply(client, ['items'].concat(newItems));
+    client.rpush.apply(client, ['items'].concat(newItems.map(item => JSON.stringify(item))));
   }
 
   handleAddition() {
-    this.persistData([this.state.newItem, ...this.state.items]);
+    let newItem = { text: this.state.newItem.text, id: this.state.items.length + 1 };
+    this.persistData([newItem, ...this.state.items]);
   }
 
   handleDeletion(index, e) {
@@ -39,7 +40,7 @@ export default class Main extends React.Component {
 
   handleChange(e) {
     this.setState({
-      newItem: e.target.value
+      newItem: { text: e.target.value, id: undefined }
     });
   }
 
@@ -47,13 +48,13 @@ export default class Main extends React.Component {
     let divStyle = {textAlign: 'center', padding: '10px 20px'};
     return (
       <div style={divStyle}>
-        <input className="" type="text" placeholder="Enter new To Do" value={this.state.newItem} onChange={this.handleChange.bind(this)} />
+        <input className="" type="text" placeholder="Enter new To Do" value={this.state.newItem.text} onChange={this.handleChange.bind(this)} />
         <input type="button" value="Submit" onClick={this.handleAddition.bind(this)} />
         <ul>
           {this.state.items.map((item, i) => {
             return (
               <li key={i}>
-                {item}
+                {item.text}
                 <input type="button" value="Delete" onClick={this.handleDeletion.bind(this, i)} />
               </li>
             );
