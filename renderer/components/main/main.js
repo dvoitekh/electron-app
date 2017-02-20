@@ -45,10 +45,9 @@ export default class Main extends React.Component {
   }
 
   render() {
-    let divStyle = {textAlign: 'center', padding: '10px 20px'};
     return (
-      <div style={divStyle}>
-        <input className="" type="text" placeholder="Enter new To Do" value={this.state.newItem.text} onChange={this.handleChange.bind(this)} />
+      <div className="todo-list">
+        <input type="text" placeholder="Enter new To Do" value={this.state.newItem.text} onChange={this.handleChange.bind(this)} />
         <input type="button" value="Submit" onClick={this.handleAddition.bind(this)} />
         <ul>
           {this.state.items.map((item, i) => {
