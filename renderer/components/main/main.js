@@ -32,10 +32,12 @@ export default class Main extends React.Component {
   handleAddition() {
     let newItem = { text: this.state.newItem.text, id: this.state.items.length + 1 };
     this.persistData([newItem, ...this.state.items]);
+    new Notification('Success', { title: "Success", body: `To Do '${this.state.newItem.text}' has been added` });
   }
 
   handleDeletion(index, e) {
     this.persistData([...this.state.items.slice(0, index), ...this.state.items.slice(index + 1)]);
+    new Notification('Success', { title: "Success", body: `To Do '${this.state.items[index].text}' has been deleted` });
   }
 
   handleChange(e) {
