@@ -14,9 +14,9 @@ export default class Main extends React.Component {
       newItem: { text: '', date: '', id: undefined }
     };
 
-    client.lrange('items', 0, -1, (err, items) => {
+    client.get('items', (err, response) => {
       this.setState({
-        items: items.map(item => JSON.parse(item))
+        items: JSON.parse(response) || []
       });
     });
   }
@@ -28,7 +28,7 @@ export default class Main extends React.Component {
     });
 
     client.del('items');
-    client.rpush.apply(client, ['items'].concat(newItems.map(item => JSON.stringify(item))));
+    client.set('items', JSON.stringify(newItems));
   }
 
   handleAddition() {
@@ -42,7 +42,7 @@ export default class Main extends React.Component {
                         type: 'question',
                         buttons: ['Yes', 'No'],
                         title: 'Confirm',
-                        message: 'Are you sure you want to quit?'
+                        message: 'Are you sure you want to delete?'
                     });
     if (confirmed) { return false }
     this.persistData([...this.state.items.slice(0, index), ...this.state.items.slice(index + 1)]);
@@ -63,7 +63,7 @@ export default class Main extends React.Component {
 
   render() {
     return (
-      <div className="todo-list">
+      <div className="todo-list"</div>
         <input type="text" placeholder="Enter new To Do" value={this.state.newItem.text} onChange={this.handleTextChange.bind(this)} />
         <input type="text" placeholder="Enter Date" value={this.state.newItem.date} onChange={this.handleDateChange.bind(this)} />&nbsp;
         <input type="button" value="Submit" onClick={this.handleAddition.bind(this)} />

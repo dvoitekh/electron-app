@@ -24,15 +24,16 @@ export default class Graph extends Component {
           }
         ]
       },
-      chartOptions: { scales: { yAxes: [ { ticks: { beginAtZero: true } } ] } }
+      chartOptions: { scales: { yAxes: [ { ticks: { beginAtZero: true } } ] } },
+      itemsLength: 0
     };
   }
 
   componentDidMount() {
     let data = [];
     let labels = [];
-    client.lrange('items', 0, -1, (err, items) => {
-      const dates = items.map(item => Date.parse(JSON.parse(item).date));
+    client.get('items', (err, response) => {
+      const dates = response && JSON.parse(response).map(item => Date.parse(item.date)) || [];
       const [startDate, endDate] = [Math.min(...dates), Math.max(...dates)];
       const SIZE = 8;
       const delta = (endDate - startDate) / SIZE;
@@ -66,6 +67,7 @@ export default class Graph extends Component {
 
       this.setState({
         chartData: chartData,
+        itemsLength: dates.length
       });
     });
   }
@@ -73,7 +75,9 @@ export default class Graph extends Component {
   render() {
     return (
       <div>
-        <LineChart data={this.state.chartData} options={this.state.chartOptions} width="450" height="350"/>
+        {(this.state.itemsLength > 1) ?
+          <LineChart data={this.state.chartData} options={this.state.chartOptions} width="450" height="350"/>
+          : <h2>No available data</h2>}
       </div>
     );
   }
